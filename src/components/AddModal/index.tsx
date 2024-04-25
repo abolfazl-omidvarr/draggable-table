@@ -54,15 +54,16 @@ export default function AddModal() {
             animate={{opacity: 1}}
             exit={{opacity: 0}}
             transition={{duration: 0.15}}
-            className='absolute z-50 w-full h-full bg-black/30 backdrop-blur grid place-content-center'
+            className='absolute z-50 w-full h-full bg-black/30 backdrop-blur flex justify-center items-center'
             onClick={onOverlayClickHandle}
         >
-            <div onClick={(e) => e.stopPropagation()} className='bg-amber-100 rounded-2xl p-5 shadow-2xl'>
+            <div onClick={(e) => e.stopPropagation()} className='bg-amber-100 w-[400px] rounded-2xl p-5 shadow-2xl'>
                 <p className='font-bold'> Please enter person's information</p>
                 <form
                     className='flex flex-col px-10 mt-5 gap-3 justify-center items-center'
                     onSubmit={handleSubmit(onSubmit)}>
                     <Input
+                        placeholder='Full name'
                         name='fullName'
                         patter={/^[A-Za-z]+(?:\s+[A-Za-z]+)*$/}
                         isError={!!errors['fullName']}
@@ -70,12 +71,14 @@ export default function AddModal() {
                         errorText='Please enter a valid fullname'
                     />
                     <Input
+                        placeholder='Username'
                         name='userName'
                         isError={!!errors['userName']}
                         register={register}
                         errorText='Please enter a valid userName'
                     />
                     <Input
+                        placeholder='Age'
                         name='age'
                         patter={/^([0-9]|[1-9][0-9]|1[01][0-9]|120)$/}
                         isError={!!errors['age']}
