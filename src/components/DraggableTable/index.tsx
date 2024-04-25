@@ -1,5 +1,13 @@
 import {useCallback, useContext, useState} from "react";
-import {DndContext, closestCorners, DragEndEvent, UniqueIdentifier} from "@dnd-kit/core";
+import {
+    DndContext,
+    closestCorners,
+    DragEndEvent,
+    UniqueIdentifier,
+    useSensor,
+    MouseSensor,
+    useSensors, TouchSensor
+} from "@dnd-kit/core";
 import {SortableContext, verticalListSortingStrategy, arrayMove} from '@dnd-kit/sortable'
 import {restrictToVerticalAxis} from '@dnd-kit/modifiers';
 
@@ -11,6 +19,19 @@ import Header from "./Header.tsx";
 export function DraggableTable() {
     const {persons, setPersons} = useContext(AppContext)
     const [activeId, setActiveId] = useState<UniqueIdentifier | undefined>(undefined);
+    const mouseSensor = useSensor(MouseSensor,{
+        activationConstraint:{
+            delay:200,
+            tolerance: 5,
+        }
+    });
+    const touchSensor = useSensor(TouchSensor);
+
+
+    const sensors = useSensors(
+        mouseSensor,
+        touchSensor,
+    );
 
 
     const handleDragEnd = useCallback((e: DragEndEvent) => {
@@ -34,10 +55,10 @@ export function DraggableTable() {
     }
 
     return (
-        <div className='w-screen md:max-w-[768px] lg:max-w-[968px] xl:max-w-[1200px] h-[60vh]  bg-white shadow-xl rounded-xl overflow-hidden'>
+        <div className='w-screen md:max-w-[768px] lg:max-w-[968px] xl:max-w-[1200px] h-[60vh] bg-white shadow-xl rounded-xl overflow-hidden'>
             <Header/>
-            <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} collisionDetection={closestCorners}
-                        modifiers={[restrictToVerticalAxis]}>
+            <DndContext sensors={sensors} onDragEnd={handleDragEnd} onDragStart={handleDragStart} collisionDetection={closestCorners}
+                        modifiers={[restrictToVerticalAxis]} >
                 <SortableContext items={persons} strategy={verticalListSortingStrategy}>
                     <div className='h-[88%] overflow-y-auto overflow-x-hidden px-3'>
                         {persons?.map(person => <DraggableRow activeId={activeId} key={person.id} person={person}/>)}

@@ -14,6 +14,7 @@ function App() {
                 <DraggableTable/>
             </div>
             <AddModal/>
+            <p className='font-bold text-xs mt-2'>* A delay of 200ms has been applied to trigger drag</p>
         </main>
     )
 }
